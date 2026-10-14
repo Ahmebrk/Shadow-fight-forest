@@ -1,0 +1,41 @@
+SHADOW CLASH: BLOOD DYNASTY — RELEASE READINESS REPORT
+Updated: 2026-10-13
+
+WORK PERFORMED IN THIS PASS
+- Re-ran the packaged JavaScript syntax checks and simulation/regression suite.
+- Fixed a misleading combo test: L->S follow-ups were previously tested without setting enough energy, so all samples failed because the move was unavailable, not because chain range was broken. The test now starts with full energy and all 60 sampled L->S follow-ups connect.
+- Preserved the existing HTML game and its mechanics; no wholesale rewrite was made.
+
+LATEST AUTOMATED RESULTS
+- Inline JavaScript syntax: 2 blocks passed Node syntax checks.
+- Combat/AI simulation (run1.js): all configured match batches completed; no NaN, out-of-bounds, or bad-reset reports. Some instrumentation still flags facing/stuck anomalies in certain AI matchups; review these if they reproduce in real gameplay.
+- Combo/damage simulation (run2.js): longest observed combo 5–6 hits; maximum observed stun around 2.3–2.7 seconds in these samples.
+- Hit range/chain simulation (run4.js): no sampled light/heavy attacks began out of reach; chain follow-ups connected at 94–100% depending on difficulty/sample.
+- Combo chain regression (run5.js): L->L and L->H 20/20 at tested gaps; L->S 20/20 at each tested gap with full energy; H->L varies by gap (12–20/20 to 20/20).
+- Rig simulations (run7.js, run8.js): 10 fighter identities use 2 base rig types; 2 skinned rigs; no reported render exceptions in these simulations.
+- Touch event simulation (dom_test.js): 84 checks, 0 failed.
+- Capture simulation (cap_run.js): 16 scenes captured.
+
+KNOWN RELEASE LIMITATIONS — DO NOT MISREPRESENT THESE
+- This is not a complete visual or device-release certification.
+- The game loads Three.js r128 from cdnjs and Google Fonts externally. Internet access is required for those resources; when Three.js fails, the game should use its 2D fallback.
+- Real 3D WebGL rendering on Android, real touch behavior, mobile frame rate, actual audio playback, and visual animation quality have not been conclusively verified in this environment.
+- Ten fighter identities currently reuse two underlying skinned base models (Ch45 and Kachujin), with styling differences; they are not ten unique base models.
+- Imported animation clips documented in this build are Boxing (light punch) and Chapa-Giratoria (heavy kick). Several other actions remain procedural.
+- The L->S test result only validates the chain when the player has sufficient energy; the move has an energy requirement in normal play.
+
+ANDROID SMOKE TEST CHECKLIST
+1. Open the HTML in a modern browser with internet access. Keep both MP3 files in the same folder.
+2. Start a match and verify the 3D characters render (not the 2D fallback).
+3. Test every fighter, weapon/attachment where present, L/H/S/U, block, dash, hit reaction, knockdown and get-up.
+4. Test pause/resume, restart, rematch, character select, settings, music/effects, and portrait/landscape resizing.
+5. Try simultaneous joystick movement and attacks; lift fingers, trigger app switching, and confirm no controls remain stuck.
+6. If a 3D model or CDN resource fails, capture a screenshot and browser console error before reporting it.
+
+STATUS: Improved and regression-tested in simulation; NOT YET VERIFIED FOR RELEASE ON A REAL ANDROID DEVICE.
+
+WEAPON ANIMATION PASS — 2026-10-14
+- Sword/axe heavy attacks now use weapon-swing posing; Soraya's rifle uses an aiming pose; Seraphina's dual blades use a two-arm heavy swing.
+- Goran's weapon is now modeled as a war axe attached to the forearm rig.
+- Regression suite rerun after edits: syntax checks pass, simulations complete, 84 DOM/touch checks pass.
+- Important: these are code/simulation checks, not visual confirmation. Verify each weapon in real 3D browser gameplay on Android.
